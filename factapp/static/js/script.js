@@ -2,12 +2,19 @@
 const checkReplace = document.querySelector('.replace-me');
 
 if (checkReplace !== null) {
+  const colors = ['#FF69B4', '#33CC33', '#6600CC'];
+  let colorIndex = 0;
   const replace = new ReplaceMe(checkReplace, {
     animation: 'animated fadeIn',
     speed: 2000,
     separator: ',',
     loopCount: 'infinite',
     autoRun: true,
+    onChange: () => {
+      const word = checkReplace.querySelector('span');
+      word.style.color = colors[colorIndex];
+      colorIndex = (colorIndex + 1) % colors.length;
+    }
   });
 }
 
