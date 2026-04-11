@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Factity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}" />
+    <link rel="icon" href="{{ url_for('static', filename='images/Fact-ity.png') }}" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="images/Fact-ity.png" alt="Factity Logo" width="50" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://mukullight.pythonanywhere.com/form">Forums</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#expertise">Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('blogindex') }}">    Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#projects">Projects</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+<div class="theblog">
+    <title>Prompt tuning and prefix tuning </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/blog.css" type="text/css">
+    <!-- MathJax for rendering LaTeX equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <div>
+    <br>
+    <br>
+
+  </div>
+
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted">Date: June 2024</span>
+            <span class="badge bg-danger">Category: Policy</span>
+        </div>
+  <h1>Prompt Tuning and Model Tuning</h1>
+
+    <p>The idea of using a prompt with the strategy of back propagation. Soft prompts are usually learned through back prop from incorporating the signals from the labeled examples. Through ablations on model size using T5, prompt tuning becomes more competitive with scale. As the parameter size of the model grows, our model closes the gap and matches the strong performance of model tuning.</p>
+    <p>This involves optimizing a soft prompt \( P_e \in \mathbb{R}^{p \times e} \), where \( p \) is the prompt length and \( e \) is the embedding dimension, using gradient descent to minimize a loss function based on labeled data \( \{(X_i, y_i)\}_{i=1}^N \).Through ablations on model size using t5. Prompt tuning becomes more competitive with scale. As the parameter size of the model grows our model closes the gap and matches the strong performance of model tuning. 
+</p>
+
+    <p>Since large models are costly to scale and serving them requires dedicated storage space, freezing the one model and serving it for multiple downstream tasks can ease this burden.</p>
+    <p>Mathematically, this reduces the number of trainable parameters from \( |\theta| \) (total model parameters) to \( p \times e \), where \( p \times e \ll |\theta| \), significantly lowering computational overhead.</p>
+
+    <p>The ease of adaptation of language models in recent years can be largely attributed to the development of new techniques involving insertion of low-rank matrices into the transformer blocks and techniques such as freezing model parameters for pre-trained models and learning task-specific weightings for the pre-layer representations. Having monolithic models with an increased size allows for more diversity in the model's ability to generate outputs, and fine-tuning becomes easier as the larger models have more neural pathways that are more complicated. This approach often outperforms the traditional few-shot prompting. By enabling mixed-task inferences and having a template of a single task-specific prompt which is used to adapt the prompt for mixed-task inference.</p>
+    <p>For instance, low-rank matrices \( A \in \mathbb{R}^{d \times r} \) and \( B \in \mathbb{R}^{r \times d} \) (where \( r \ll d \)) can approximate weight updates, reducing the parameter count from \( d^2 \) to \( 2dr \).</p>
+
+    <p>There have been significant efforts to automate the prompt design in recent years. Although this is a good approach, the non-deterministic nature of language models makes it much harder to track the responses since each of the responses is unique, and traceability of the neural pathways is much more expensive than the inference.</p>
+
+    <h2>Prefix Tuning</h2>
+    <p>Prefix tuning freezes the model parameters and back propagates the error through the prefix activations in each of the encoder blocks of the transformers.</p>
+    <p>Here, prefix vectors \( P_k \in \mathbb{R}^{m \times d_k} \) and \( P_v \in \mathbb{R}^{m \times d_v} \) are introduced to the attention mechanism, where \( m \) is the prefix length, and \( d_k \), \( d_v \) are dimensions of keys and values, respectively, optimizing only these while keeping \( \theta \) fixed.</p>
+
+    <h2>Prompt Tuning</h2>
+    <p>In prompt tuning, we freeze the model parameters and allow \( k \) additional tunable parameters in the downstream tasks. This soft prompt is tuned end-to-end and can condense the signal from a fully labeled dataset. Prompt tuning becomes more competitive with scale, allowing task-specific parameters to be derived from generalist parameters. It also supports prompt ensembling, where multiple tasks can be learned from the same prompt, improving quality and robustness as the model scales.</p>
+    <p>The prompt \( P_e \) is optimized to maximize \( p(y \mid X, P_e; \theta) \), often using a cross-entropy loss \( \mathcal{L} = -\sum y_i \log p(y_i \mid X, P_e; \theta) \).</p>
+
+    <p>On domain shift problems, prompt tuning outperforms traditional methods. This approach also highlights the importance of prompt ensembling for better generalization.</p>
+
+    <h2>Mathematical Formulation</h2>
+    <p>The task involved here is the probability of classifying if \( p(y \mid X; \theta) \), where \( y \) is the class label, \( X = \{x_1, x_2, \dots, x_n\} \) is the input sequence of tokens, and \( \theta \) represents the model's parameters.</p>
+    <p>The input \( X \) is embedded as \( X_e \in \mathbb{R}^{n \times e} \), concatenated with \( P_e \in \mathbb{R}^{p \times e} \) to form \( [P_e; X_e] \in \mathbb{R}^{(p + n) \times e} \), and processed to compute \( p(y \mid [P_e; X_e]; \theta) \).</p>
+
+    <h2>Initialization and Training</h2>
+    <p>There are many possible ways to initialize the prompt representations. One can train from scratch with random initializations or initialize the prompt representations from words drawn from the model's vocabulary. In practice, initializing with specific embeddings from valid tokens can prime the model to restrict output sequences to legal classes.</p>
+    <p>For example, \( P_e \) might be initialized with random values \( \sim \mathcal{N}(0, 0.1) \) or embeddings of tokens sampled from the vocabulary \( V \).</p>
+
+    <p>The existence of decoding priors influences how the sentinels of the vocabulary are stimulated, especially since pretraining is exclusively on span corruption. For T5 models, this involves converting masked tokens to sentinel tokens, which can limit diversity in responses due to the constrained vocabulary.</p>
+
+    <h2>Advantages and Challenges of Prompt Tuning</h2>
+    <p>Unlearning span corruption 
+
+Here we are dealing with pretrained t5 models tasked with converting the masked tokens to sentinel tokens although this approach is effective it comes with its own drawbacks such as having limited diversity in its responses it is filled with tokens from the limited vocabulary and may not be so effective in its response generation capabilities as override through prompt alone cannot be adjusted and fine tuning is a further expense.
+
+
+The study has observed the unique advantages and disadvantages of the prompt tuning vs model tuning it has been observed that when a specific prompt template is selected preferably with large token count seems to produce much better outputs despite having almost 20000 fewer parameters than there model specific fine tuning counterparts.
+
+There is a strong correlation between the size of the model and the response quality even when the token size of the prompts were reduced. The larger models tend to be much more forgiving
+</p>
+    <p>This efficiency stems from tuning only \( p \times e \) parameters versus \( |\theta| \), often orders of magnitude larger.</p>
+
+    <p>For prompt length and initialization, a variable approach is used, selecting prompts of sizes like 1, 5, 20, or 100 tokens. Initialization is often done by sampling uniformly in the range [-0.5, 0.5], with the model's vocabulary restricted to the 5,000 most common tokens. This restriction ensures that the model only looks for words outside the context when necessary, controlling the diversity of generated responses.</p>
+
+    <p>However, challenges remain, such as the occasional generation of empty strings in medium-scale models due to limited vocabulary and the non-deterministic nature of language models. Larger models trained for at least 100,000 steps tend to be more reliable in such cases.</p>
+
+    <h2>Comparison with Other Approaches</h2>
+    <p>Previous studies have explored similar techniques, such as feeding the entire vocabulary into models or using masking tokens with learnable output layers for classification. However, these methods often lack flexibility, especially for language generation tasks. Other approaches, like inserting adaptor layers between transformer blocks, can be more costly than prompt tuning in the long run.</p>
+
+    <p>By operating at the prompt level, prompt tuning reduces the risk of overfitting, as it avoids memorizing specific lexical cues or spurious correlations—a common issue in fine-tuning. Additionally, since prompts work in the continuous embedding space, they can be less intuitive than discrete tokens, but clustering approaches show that similar tokens often group together in this space.</p>
+    <p>For example, embeddings in \( \mathbb{R}^e \) can be clustered using algorithms like k-means to reveal semantic similarities.</p>
+
+    <p>Thus, prompt tuning, when implemented with the right strategy, is as effective as fine-tuning but without the drawbacksFujiover-parametrization.</p>
+
+    </div>
+</div>
+
+    <!-- Footer -->
+<footer class="footer bg-danger py-6">
+        
+  <!-- Remove the container if you want to extend the Footer to full width. -->
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Links -->
+      <section class="">
+        <!--Grid row-->
+        <div class="row">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">
+              Factity
+            </h6>
+            <p>
+              Creating Safe AI systems for the future of Mankind.
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Products</h6>
+            <p>
+              <a class="text-white">Forums</a>
+            </p>
+            <p>
+              <a class="text-white">Data</a>
+            </p>
+            <p>
+              <a class="text-white">Research</a>
+            </p>
+            <p>
+              <a class="text-white">Policy</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+            <p><i class="fas fa-home mr-3"></i> UK</p>
+            <p><i class="fas fa-envelope mr-3"></i> mukulnamagiri1@gmail.com</p>
+            <p><i class="fas fa-phone mr-3"></i> +44 7587827005</p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Follow us</h6>
+<!-- From Uiverse.io by Praashoo7 --> 
+<div class="main">
+  <div class="up">
+    <button class="card1">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="30px" height="30px" fill-rule="nonzero" class="instagram"><g fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8,8)"><path d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z"></path></g></g></svg>
+    </button>
+    <button class="card2">
+      <!-- Twitter X SVG icon -->
+      <svg class="footer-icon" viewBox="0 0 24 24" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg"><path d="m15.5 10v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h-3v1h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-2h-1v-1h-1v-1h-7v1h1v1h1v1h1v2h1v1h1v2h1v1h1v2h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h3v-1h1v-1h1v-1h1v-1h1v-1h1v-1h2v1h1v1h1v2h1v1h1v1h7v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1zm0 4v1h1v2h1v1h1v2h-3v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h3v1h1v2h1v1h1v2h1v1h1v1h1v2z"/></svg><
+    </button>
+  </div>
+  <div class="down">
+    <button class="card3">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px" class="github">    <path d="M15,3C8.373,3,3,8.373,3,15c0,5.623,3.872,10.328,9.092,11.63C12.036,26.468,12,26.28,12,26.047v-2.051 c-0.487,0-1.303,0-1.508,0c-0.821,0-1.551-0.353-1.905-1.009c-0.393-0.729-0.461-1.844-1.435-2.526 c-0.289-0.227-0.069-0.486,0.264-0.451c0.615,0.174,1.125,0.596,1.605,1.222c0.478,0.627,0.703,0.769,1.596,0.769 c0.433,0,1.081-0.025,1.691-0.121c0.328-0.833,0.895-1.6,1.588-1.962c-3.996-0.411-5.903-2.399-5.903-5.098 c0-1.162,0.495-2.286,1.336-3.233C9.053,10.647,8.706,8.73,9.435,8c1.798,0,2.885,1.166,3.146,1.481C13.477,9.174,14.461,9,15.495,9 c1.036,0,2.024,0.174,2.922,0.483C18.675,9.17,19.763,8,21.565,8c0.732,0.731,0.381,2.656,0.102,3.594 c0.836,0.945,1.328,2.066,1.328,3.226c0,2.697-1.904,4.684-5.894,5.097C18.199,20.49,19,22.1,19,23.313v2.734 c0,0.104-0.023,0.179-0.035,0.268C23.641,24.676,27,20.236,27,15C27,8.373,21.627,3,15,3z"></path></svg>
+    </button>
+    <button class="card4">
+      <svg height="30px" width="30px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="discord"><path d="M40,12c0,0-4.585-3.588-10-4l-0.488,0.976C34.408,10.174,36.654,11.891,39,14c-4.045-2.065-8.039-4-15-4s-10.955,1.935-15,4c2.346-2.109,5.018-4.015,9.488-5.024L18,8c-5.681,0.537-10,4-10,4s-5.121,7.425-6,22c5.162,5.953,13,6,13,6l1.639-2.185C13.857,36.848,10.715,35.121,8,32c3.238,2.45,8.125,5,16,5s12.762-2.55,16-5c-2.715,3.121-5.857,4.848-8.639,5.815L33,40c0,0,7.838-0.047,13-6C45.121,19.425,40,12,40,12z M17.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C21,28.209,19.433,30,17.5,30z M30.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C34,28.209,32.433,30,30.5,30z"></path></svg>
+    </button>
+  </div>
+</div>          </div>
+        </div>
+        <!--Grid row-->
+      </section>
+      <!-- Section: Links -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/"
+         >Factity</a
+        >
+    </div>
+    <!-- Copyright -->
+    </div>
+
+<!-- End of .container -->
+      </footer>
+
+
+    <script src="js/replaceme.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </body>
+</html>
+
+
+

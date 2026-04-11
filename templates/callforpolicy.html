@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Factity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}" />
+    <link rel="icon" href="{{ url_for('static', filename='images/Fact-ity.png') }}" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="{{ url_for('static', filename='images/Fact-ity.png') }}" alt="Factity Logo" width="50", height="50" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://mukullight.pythonanywhere.com/form">Forums</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#expertise">Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('blogindex') }}">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#projects">Projects</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+<div class="theblog">
+    <title>The Call for Responsible AI Research Labs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}" type="text/css">
+    <!-- MathJax for rendering LaTeX equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <div>
+    <br>
+    <br>
+
+  </div>
+
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted">Date: June 2024</span>
+            <span class="badge bg-danger">Category: Policy</span>
+        </div>
+    <h1>The Call for Policy Makers on Importance of Interpretability</h1>
+
+    <h2>Introduction: The Hype and Reality of Superhuman AI</h2>
+    <p>The impact of superhuman AI seems <span class="highlight">far-fetched</span> to some, and critics argue that the returns on investment are not substantial at the moment. This is true to some extent, as with all cycles of technological revolution, there is naive optimism—or rather overly emphasized techno-optimism—from a select few. Is it really the case that these large monolithic models, which we interact with via a small text box, seem to know <span class="italic-emphasis">anything and everything</span> about the world except multiply two large numbers, which a 40-year-old calculator could do? Why is this of concern, why the hype, and what is destined for us?</p>
+
+    <hr>
+
+    <h2>The Enigma of Intelligence in AI</h2>
+    <p>I find the concept of intelligence to be a weird phenomenon, to be honest.</p>
+    <blockquote>
+        "Is it momentary, like when you are super motivated and enthusiastic, you solve more problems, but when you are bummed out, you do not even want to do a few additions?"
+    </blockquote>
+    <p>But we are humans, aren’t we, with all of our fundamental flaws, neurobiological responses, and mood swings? Why is it the case with this text box? Why does it not give me what I want but seems to possess the entire knowledge? I have pondered this question for a long time, looked at all aspects trying to explain what could be the reason, examined architectures of models, and tried looking at which neurons contributed to what. This might sound a bit <span class="highlight">scary</span>, but some of the top researchers in the world don’t even have any clear idea how this works. All we know for certain is whether the response is right or wrong, and if it is right, how good it is. That is all we know, and that is all we could possibly feed to the large language model (LLM).</p>
+
+    <hr>
+
+    <h2>Pressures on AI Research Labs</h2>
+    <p>AI research labs face intense demands:</p>
+    <ul>
+        <li>Pressure from investors to show return on investment</li>
+        <li>Fear of competition from other key players taking market share</li>
+        <li>The need for first-mover advantage in tech</li>
+    </ul>
+    <p>Most labs are pressured to produce results quickly. You might ask, what is new here? Research has always been a dark space, venturing into unknown territory—that is how we find things. But this is different. At every development phase of any new thing, we can often point to essential, tractable steps involved in the development or discovery. But for these cheeky models, it is not the case. Once we found the ideal architecture of the neural net, we just kept throwing compute and data at it, and surprisingly, the mechanical brain kept getting better and better.</p>
+
+    <hr>
+
+    <h2>The Unexplainable Success of AI Models</h2>
+    <p>What is <span class="highlight">scary</span> is when we try to explain why this works. A thinking machine whose responses, at this point, are in most cases almost indistinguishable from humans and almost sounds like it has a PhD in every single topic in the world. This is terrifying, as this will probably be the last thing we as humanity discover. How good are these models going to be? Are we going to encounter diminishing returns, or will the growth curve eventually plateau? Some of these scenarios could potentially materialize in the future, and there is a strong case for it.</p>
+
+    <hr>
+
+    <h2>Multimodal AI and Future Capabilities</h2>
+    <p>We as humans acquire information through multiple modalities like <span class="icon">📝</span> text, <span class="icon">🎙️</span> speech, <span class="icon">👁️</span> vision, <span class="icon">🔊</span> sound, etc. The same goes for these AI models too. We are at a stage where we are training these models with just corpuses of text. A fully capable AI would have knowledge of video, audio, space, time, and all the sensory feelings that we as humans possess, plus the added bonus of processing multiple things in parallel. The real question is, when will these AIs achieve these capabilities? If they do, what is at stake, and what are we going to face in the future?</p>
+
+    <hr>
+
+    <h2>The Race and Responsibility of AI Labs</h2>
+    <p>With most AI labs racing to get to the finish line, it is their responsibility to ensure it is done correctly. If we regulate them, how do we ensure we are not falling behind competitors or threat actors in the market?</p>
+    <div class="callout">
+        <p><strong>Key Responsibility:</strong> Private institutions have some responsibility to comply with regulatory standards, but it should not burden them.</p>
+    </div>
+    <div class="callout">
+        <p><strong>Global Duty:</strong> It is the responsibility of united public bodies and governments around the world to fund this mission because we are not funding just another bogus project.</p>
+    </div>
+    <p>Once AI reaches supreme capabilities, the terms funding and commerce as we know them will be fundamentally changed. The rewards we get for hard work and risk-taking will mean nothing, and future systems should seek purpose elsewhere instead of work.</p>
+  <h2>The Dangers of Advanced AI</h2>
+        <p>Let’s get back to the real discussion: how dangerous is it? According to Anthropic’s statement on ASL (AI Safety Level) standards for classifying threat levels, they have identified a pattern of ASL(n), where every subsequent version of n leads to more dangerous capabilities for AI tech:</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>ASL-1</strong>: Systems that pose no meaningful catastrophic risk, e.g., a 2018 LLM or an AI system that only plays chess.</li>
+            <li class="list-group-item"><strong>ASL-2</strong>: Systems that show early signs of dangerous capabilities—for example, the ability to give instructions on how to build bioweapons—but where the information is not yet useful due to insufficient reliability or not providing information that a search engine couldn’t. Current LLMs, including Claude, appear to be ASL-2.</li>
+            <li class="list-group-item"><strong>ASL-3</strong>: Systems that substantially increase the risk of catastrophic misuse compared to non-AI baselines (e.g., search engines or textbooks) or that show low-level autonomous capabilities.</li>
+            <li class="list-group-item"><strong>ASL-4 and higher (ASL-5+)</strong>: Not yet defined as they are too far from present systems but will likely involve qualitative escalations in catastrophic misuse potential and autonomy.</li>
+        </ul>
+        <p><a href="https://www.anthropic.com/news/anthropics-responsible-scaling-policy" class="link-primary">Anthropic’s Responsible Scaling Policy</a></p>
+
+        <h2>Shifting Responsibility for AI Safety</h2>
+        <p>Although private labs spend resources to make these systems more secure, there should be a shift in this approach. It is not the task of private entities, as they are often under-resourced and should not spend man-hours developing these safety measures. Everyone is responsible for this tech, not a country or a company. It is tech for humanity, and a transparent or at least universal standard or test team organized by a public body is necessary and should be maintained by the government. Once these models reach ASL-2, it becomes absolutely necessary for them to be audited by both government and independent companies. There should be a universal repository of test standards on how interpretable these models should be, and I believe there is a strong case for implementing good model perturbation studies.</p>
+
+        <h2>Taxonomy for AI Interpretability</h2>
+
+        <h3>Overview of Interpretability Dimensions</h3>
+        <p>Some of the taxonomy for the interpretability task includes:</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Passive vs. Active Dimension</li>
+            <li class="list-group-item">Type/Format of the Produced Explanations</li>
+            <li class="list-group-item">Local to Global Interpretability Dimension</li>
+        </ul>
+        <p>Approaches can be local or global, and interpretability can be active or passive.</p>
+
+        <h3>Local vs. Active Dimension</h3>
+        <p><strong>Passive:</strong> Interpretability involves a trained network with weights to extract logic rules or understand patterns.</p>
+        <p><strong>Active:</strong> Interpretability involves actively changing the active network during the training process.</p>
+
+        <h3>Explanation Types</h3>
+        <p>Examples include attribution, hidden semantic systems, rules, or methods like decision trees, decision rules, or decision trees.</p>
+
+        <h3>Local, Semi-Local, and Global</h3>
+        <p><strong>Local:</strong> Focuses on target localization of target inputs, focusing on local feature values, and local gradients of variables like gradients.</p>
+        <p><strong>Semi-Local:</strong> Takes an epsilon neighborhood around an input and evaluates thresholds for decision-making.</p>
+        <h3>Local</h3>
+        <p>Analyzes the local network’s structure and connections for specific inputs and outputs.</p>
+
+        <h2>Passive Interpretability of Trained Networks</h2>
+
+        <h3>Passive Rule for Rules Explanation</h3>
+        <p>This category focuses on rules that are trained neural networks, where networks are antecedents and consequents (e.g., p implies q) for a small range of inputs (xi) and outputs (yi).</p>
+               <h3>Semi-Local Structure for Rules</h3>
+        <p>
+            - Case 1: We look at xi → xi → yi maps and note which nodes and which connections are present or absent at nodes or connections.<br>
+            - Semi-local: We take an epsilon neighborhood around x of an epsilon neighborhood and judge thresholds for different units of x for different y → yi outputs, for example, looking for features and creating perturbations for analysis.
+        </p>
+
+        <h3>Global Interpretability for Rules</h3>
+        <p>
+            The entire decision tree’s entire decision network is analyzed, and decision rules are judged for consistency. This is highly computationally intensive but, requiring extensive computational resources, and the search space for analyzing the network is significantly large. The search space for network structures is explored (decompositional approach, initially developed for CNNs, but for larger networks, the search space grows exponentially large (O(3^n)).
+        </p>
+        <p>For example:</p>
+        <p class="equation">\[ \left( \sum_{i \in \{1,3\}} w_i x_i + b_i \right) > \beta \sigma \]</p>
+        <p>We might remove negative weights and demonstrate at what point weights flip the threshold flips (e.g., using the KT algorithm for demonstration).</p>
+
+        <p>Alternatively, treating the network as a black box (pedagogical approach) and using frameworks like neuro-linear and greedy sequential covering allows us to extract concise rules for concise, precise rule extraction from the trained neural net.</p>
+
+        <h3>Explaining Hidden Semantics for Interpretability</h3>
+        <p>
+            - <strong>Local and Semi-Local</strong>: Hidden neurons are examined to analyze h(x) at x rather than outputs at y, focusing on hidden states.<br>
+            - <strong>Global</strong>: Hidden layers are globally analyzed to identify consistent, global patterns and exclude inconsistent ones.
+        </p>
+
+        <h2>Attribution for Interpretability</h2>
+        <p><strong>Passive Interpretation</strong>: Maps xi → xi → yi with attributes ai. Using xi → neural nets → nets → yi for analysis, we employ saliency maps and analyze sensitivities, performing sensitivity analyses and gradient analyses.</p>
+
+        <p><strong>Global</strong>: Examines neuron maps based on higher-level structures to assess feature importance of features for determining outcomes.</p>
+
+        <h2>Conclusion</h2>
+        <p>The rapid conclusion of rapid advancements in AI presents both unprecedented opportunities and significant challenges presents. As AI models approach higher levels of ASL, a global effort, involving governments, private entities, and public bodies, is critical for ensuring responsible AI development is critical. By establishing universal standards and robust frameworks, we can navigate AI’s future responsibly, ensuring safety and maximizing benefits for humanity’s benefit.</p>
+
+
+
+
+    </div>
+</div>
+
+    <!-- Footer -->
+<footer class="footer bg-danger py-6">
+        
+  <!-- Remove the container if you want to extend the Footer to full width. -->
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Links -->
+      <section class="">
+        <!--Grid row-->
+        <div class="row">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">
+              Factity
+            </h6>
+            <p>
+              Creating Safe AI systems for the future of Mankind.
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Products</h6>
+            <p>
+              <a class="text-white">Forums</a>
+            </p>
+            <p>
+              <a class="text-white">Data</a>
+            </p>
+            <p>
+              <a class="text-white">Research</a>
+            </p>
+            <p>
+              <a class="text-white">Policy</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <hr class="w-100 clearfix d-md-none" />
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+            <p><i class="fas fa-home mr-3"></i> UK</p>
+            <p><i class="fas fa-envelope mr-3"></i> mukulnamagiri1@gmail.com</p>
+            <p><i class="fas fa-phone mr-3"></i> +44 7587827005</p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Follow us</h6>
+<!-- From Uiverse.io by Praashoo7 --> 
+<div class="main">
+  <div class="up">
+    <button class="card1">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="30px" height="30px" fill-rule="nonzero" class="instagram"><g fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8,8)"><path d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z"></path></g></g></svg>
+    </button>
+    <button class="card2">
+      <!-- Twitter X SVG icon -->
+      <svg class="footer-icon" viewBox="0 0 24 24" width="30px" height="30px" xmlns="http://www.w3.org/2000/svg"><path d="m15.5 10v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h-3v1h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-2h-1v-1h-1v-1h-7v1h1v1h1v1h1v2h1v1h1v2h1v1h1v2h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h3v-1h1v-1h1v-1h1v-1h1v-1h1v-1h2v1h1v1h1v2h1v1h1v1h7v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1zm0 4v1h1v2h1v1h1v2h-3v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h3v1h1v2h1v1h1v2h1v1h1v1h1v2z"/></svg><
+    </button>
+  </div>
+  <div class="down">
+    <button class="card3">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px" class="github">    <path d="M15,3C8.373,3,3,8.373,3,15c0,5.623,3.872,10.328,9.092,11.63C12.036,26.468,12,26.28,12,26.047v-2.051 c-0.487,0-1.303,0-1.508,0c-0.821,0-1.551-0.353-1.905-1.009c-0.393-0.729-0.461-1.844-1.435-2.526 c-0.289-0.227-0.069-0.486,0.264-0.451c0.615,0.174,1.125,0.596,1.605,1.222c0.478,0.627,0.703,0.769,1.596,0.769 c0.433,0,1.081-0.025,1.691-0.121c0.328-0.833,0.895-1.6,1.588-1.962c-3.996-0.411-5.903-2.399-5.903-5.098 c0-1.162,0.495-2.286,1.336-3.233C9.053,10.647,8.706,8.73,9.435,8c1.798,0,2.885,1.166,3.146,1.481C13.477,9.174,14.461,9,15.495,9 c1.036,0,2.024,0.174,2.922,0.483C18.675,9.17,19.763,8,21.565,8c0.732,0.731,0.381,2.656,0.102,3.594 c0.836,0.945,1.328,2.066,1.328,3.226c0,2.697-1.904,4.684-5.894,5.097C18.199,20.49,19,22.1,19,23.313v2.734 c0,0.104-0.023,0.179-0.035,0.268C23.641,24.676,27,20.236,27,15C27,8.373,21.627,3,15,3z"></path></svg>
+    </button>
+    <button class="card4">
+      <svg height="30px" width="30px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="discord"><path d="M40,12c0,0-4.585-3.588-10-4l-0.488,0.976C34.408,10.174,36.654,11.891,39,14c-4.045-2.065-8.039-4-15-4s-10.955,1.935-15,4c2.346-2.109,5.018-4.015,9.488-5.024L18,8c-5.681,0.537-10,4-10,4s-5.121,7.425-6,22c5.162,5.953,13,6,13,6l1.639-2.185C13.857,36.848,10.715,35.121,8,32c3.238,2.45,8.125,5,16,5s12.762-2.55,16-5c-2.715,3.121-5.857,4.848-8.639,5.815L33,40c0,0,7.838-0.047,13-6C45.121,19.425,40,12,40,12z M17.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C21,28.209,19.433,30,17.5,30z M30.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C34,28.209,32.433,30,30.5,30z"></path></svg>
+    </button>
+  </div>
+</div>          </div>
+        </div>
+        <!--Grid row-->
+      </section>
+      <!-- Section: Links -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/"
+         >Factity</a
+        >
+    </div>
+    <!-- Copyright -->
+    </div>
+
+<!-- End of .container -->
+      </footer>
+
+
+    <script src="js/replaceme.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
+
+
+
