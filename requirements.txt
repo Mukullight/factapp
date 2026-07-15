@@ -2,5 +2,5 @@ livereload
 Flask
 requests
 gunicorn
-
+frozen_flask
 
