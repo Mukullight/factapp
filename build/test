@@ -10,17 +10,17 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/css/font-awesome.css" />
-    <link rel="stylesheet" href="/static/css/bootstrap.css" />
-    <link rel="stylesheet" href="/static/css/styles1.css" />
-    <link rel="icon" href="/static/images/Fact-ity.png" />
+    <link rel="stylesheet" href="static/css/font-awesome.css" />
+    <link rel="stylesheet" href="static/css/bootstrap.css" />
+    <link rel="stylesheet" href="static/css/styles1.css" />
+    <link rel="icon" href="static/images/Fact-ity.png" />
     <title>Factity</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <img src="/static/images/Fact-ity.png" alt="Factity Logo" width="50" />
+          <img src="static/images/Fact-ity.png" alt="Factity Logo" width="50" />
         </a>
         <button
           class="navbar-toggler"
@@ -55,8 +55,8 @@
       </div>
     </nav>
 
-<link rel="stylesheet" href="/static/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/css/blog.css">
+<link rel="stylesheet" href="static/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/css/blog.css">
 <div class="container">
     <h1>Welcome to the Test Page</h1>
     <p>This is a sample page styled with Bootstrap and custom CSS.</p>
@@ -407,8 +407,8 @@
 
 <!-- End of .container -->
       </footer>
-    <script src="/static/js/replaceme.min.js"></script>
-    <script src="/static/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/script.js"></script>
+    <script src="static/js/replaceme.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/script.js"></script>
   </body>
 </html>

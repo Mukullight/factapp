@@ -58,5 +58,6 @@ if __name__ == '__main__':
     app.debug = True
     # Watch specific paths (optional, default is 'static'
     app.config['FREEZER_IGNORE_404_NOT_FOUND'] = True   # may not exist in older versions
+    app.config['FREEZER_RELATIVE_URLS'] = True
     freezer = Freezer(app)
     freezer.freeze()

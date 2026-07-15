@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
-  <link rel="stylesheet" href="/static/css/blog.css">
-  <link rel="stylesheet" href="/static/css/blog.rtl.css">
-  <link rel="stylesheet" href="/static/css/bootstrap.css">
-  <link rel="stylesheet" href="/static/css/font-awesome.css">
+  <link rel="stylesheet" href="static/css/blog.css">
+  <link rel="stylesheet" href="static/css/blog.rtl.css">
+  <link rel="stylesheet" href="static/css/bootstrap.css">
+  <link rel="stylesheet" href="static/css/font-awesome.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap">
-  <link rel="stylesheet" href="/static/css/gen/example.css">
+  <link rel="stylesheet" href="static/css/gen/example.css">
 </head>
 
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -65,7 +65,7 @@
       <p class="lead mb-0"><a href="#" class="text-body-emphasis fw-bold">Continue reading...</a></p>
     </div>
     <div class=" col-lg-6 px-0">
-      <img class="img-fluid rounded" src="/static/images/lora.jpg" alt="Low Rank Adaptation Illustration" width="auto" height="300" style="padding-left: 2.5rem;">
+      <img class="img-fluid rounded" src="static/images/lora.jpg" alt="Low Rank Adaptation Illustration" width="auto" height="300" style="padding-left: 2.5rem;">
     </div>
   </div>
 </div>
@@ -109,7 +109,7 @@
         <h3 class="mb-0">Age of agents</h3>
         <div class="mb-1 text-body-secondary">Jul 19, 2025</div>
         <p class="mb-auto">From personal introspection to artificial intelligence: How AI agents mirror human thoughtfulness by breaking down complex tasks into collaborative, reflective processes that could redefine our relationship with technology. Creating a swarm of independent thinkers working in unison to bring ideas to life.</p>
-        <a href="/blog" class="icon-link gap-1 icon-link-hover stretched-link">
+        <a href="blog" class="icon-link gap-1 icon-link-hover stretched-link">
           Continue reading
         </a>
       </div>
@@ -249,7 +249,7 @@ Improving model performance requires thorough monitoring and modification standa
       </article>
 <article class="blog-post">
   <h2 class="display-5 link-body-emphasis mb-1">Prompt tuning using propagation</h2>
-  <p class="blog-post-meta">June, 2025 by <a href="/ptune">Factity AI</a></p>
+  <p class="blog-post-meta">June, 2025 by <a href="ptune">Factity AI</a></p>
 
   <p>In this work, we explore "prompt tuning," an innovative approach for adapting frozen language models to specific tasks without modifying their core parameters. Unlike traditional methods, this technique offers remarkable efficiency while maintaining strong performance.</p>
   
