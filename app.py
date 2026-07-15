@@ -55,11 +55,8 @@ def blogindex():
 #
 
 if __name__ == '__main__':
-    app.debug = True 
-    server = Server(app.wsgi_app)
+    app.debug = True
     # Watch specific paths (optional, default is 'static'
-
+    app.config['FREEZER_IGNORE_404_NOT_FOUND'] = True   # may not exist in older versions
     freezer = Freezer(app)
-
-    if _name_ == '_main_':
-       freezer.freeze()
+    freezer.freeze()
