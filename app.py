@@ -2,6 +2,9 @@ from flask import Flask, render_template
 import os 
 from livereload import Server
 
+
+from flask_frozen import Freezer
+
 app = Flask(__name__, template_folder = "templates", static_folder='static')
 
 @app.route('/')
@@ -54,11 +57,9 @@ def blogindex():
 if __name__ == '__main__':
     app.debug = True 
     server = Server(app.wsgi_app)
-    # Watch specific paths (optional, default is 'static', 'templates')
-    server.watch('static/')
-    server.watch('templates/')
-    server.watch('static/js/')
-    server.watch('static/images/')
-    server.watch('static/css/')
-    server.serve(port=4000, debug = True)
-    server.serve(host='127.0.0.1', port=4000, debug=True)
+    # Watch specific paths (optional, default is 'static'
+
+    freezer = Freezer(app)
+
+    if _name_ == '_main_':
+       freezer.freeze()
