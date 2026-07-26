@@ -1,362 +1,1535 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="static/css/blog.css">
-  <link rel="stylesheet" href="static/css/blog.rtl.css">
-  <link rel="stylesheet" href="static/css/bootstrap.css">
-  <link rel="stylesheet" href="static/css/font-awesome.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap">
-  <link rel="stylesheet" href="static/css/gen/example.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factity — AI Safety Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --paper: #EEF1F2;
+        --paper-raised: #FFFFFF;
+        --ink: #1B222B;
+        --ink-soft: #57616C;
+        --hairline: #D9DEE2;
+        --serif: 'Fraunces', Georgia, serif;
+        --sans: 'Inter', system-ui, -apple-system, sans-serif;
+        --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --c-interp: #12897F;
+        --c-interp-tint: rgba(18, 137, 127, .10);
+        --c-align: #4453C4;
+        --c-align-tint: rgba(68, 83, 196, .10);
+        --c-robust: #D1492E;
+        --c-robust-tint: rgba(209, 73, 46, .10);
+        --c-gov: #CC9420;
+        --c-gov-tint: rgba(204, 148, 32, .12);
+        --c-found: #2E7EA8;
+        --c-found-tint: rgba(46, 126, 168, .10);
+        --c-future: #8C4FCB;
+        --c-future-tint: rgba(140, 79, 203, .10);
+    }
+
+    :root[data-theme="dark"] {
+        --paper: #14181E;
+        --paper-raised: #1C222A;
+        --ink: #EDEFF2;
+        --ink-soft: #A6AEB8;
+        --hairline: #333B44;
+        --c-interp: #3FCBB9;
+        --c-interp-tint: rgba(63, 203, 185, .16);
+        --c-align: #8393F2;
+        --c-align-tint: rgba(131, 147, 242, .18);
+        --c-robust: #F2795C;
+        --c-robust-tint: rgba(242, 121, 92, .18);
+        --c-gov: #F2C265;
+        --c-gov-tint: rgba(242, 194, 101, .18);
+        --c-found: #5FB4DE;
+        --c-found-tint: rgba(95, 180, 222, .18);
+        --c-future: #C08AF0;
+        --c-future-tint: rgba(192, 138, 240, .18);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+    html {
+        color-scheme: light;
+    }
+    html[data-theme="dark"] {
+        color-scheme: dark;
+    }
+    body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        transition: background-color .25s ease, color .25s ease;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--serif);
+        font-weight: 600;
+        color: var(--ink);
+    }
+    p {
+        margin: 0 0 .75rem;
+    }
+    a {
+        color: inherit;
+    }
+    a:focus-visible,
+    button:focus-visible {
+        outline: 2px solid var(--c-align);
+        outline-offset: 3px;
+    }
+
+    .spectrum-bar {
+        height: 4px;
+        background: linear-gradient(90deg,
+                var(--c-interp), var(--c-align), var(--c-robust),
+                var(--c-gov), var(--c-found), var(--c-future));
+    }
+
+    .container {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* ---------- Header ---------- */
+    .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--hairline);
+        transition: border-color .25s ease;
+    }
+    .site-header .side {
+        flex: 1;
+        font-size: .9rem;
+    }
+    .site-header .side.right {
+        text-align: right;
+        display: flex;
+        gap: .75rem;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .site-header a {
+        text-decoration: none;
+        color: var(--ink-soft);
+    }
+    .site-header a:hover {
+        color: var(--ink);
+    }
+    .logo {
+        flex: 1;
+        text-align: center;
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 1.6rem;
+        letter-spacing: .01em;
+        text-decoration: none;
+        color: var(--ink);
+    }
+    .btn-outline {
+        border: 1px solid var(--ink-soft);
+        border-radius: 999px;
+        padding: .35rem .9rem;
+        font-size: .82rem;
+    }
+
+    .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid var(--hairline);
+        background: var(--paper-raised);
+        cursor: pointer;
+        color: var(--ink);
+        padding: 0;
+        transition: background-color .25s ease, border-color .25s ease;
+    }
+    .theme-toggle svg {
+        width: 16px;
+        height: 16px;
+        display: block;
+    }
+    .theme-toggle .icon-moon {
+        display: none;
+    }
+    html[data-theme="dark"] .theme-toggle .icon-sun {
+        display: none;
+    }
+    html[data-theme="dark"] .theme-toggle .icon-moon {
+        display: block;
+    }
+
+    /* ---------- Hamburger button ---------- */
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: 1px solid var(--hairline);
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1100;
+        transition: border-color .25s ease;
+    }
+    .hamburger span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--ink);
+        border-radius: 2px;
+        transition: transform .3s ease, opacity .3s ease;
+        transform-origin: center;
+    }
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ---------- Mobile menu backdrop & panel ---------- */
+    .mobile-menu-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .5);
+        z-index: 1050;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .3s ease;
+    }
+    .mobile-menu-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-menu-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 320px;
+        max-width: 85vw;
+        height: 100%;
+        height: 100dvh;
+        background: var(--paper-raised);
+        z-index: 1060;
+        transform: translateX(100%);
+        transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding: 1.5rem;
+        border-left: 1px solid var(--hairline);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, .12);
+        transition: transform .35s cubic-bezier(.4, 0, .2, 1), background-color .25s ease, border-color .25s ease;
+    }
+    .mobile-menu-panel.open {
+        transform: translateX(0);
+    }
+
+    .mobile-menu-panel .menu-close {
+        align-self: flex-end;
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        border: 1px solid var(--hairline);
+        background: var(--paper);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink);
+        font-size: 1.2rem;
+        padding: 0;
+        flex-shrink: 0;
+        transition: background-color .25s ease, border-color .25s ease;
+    }
+    .mobile-menu-panel .menu-close:hover {
+        background: var(--hairline);
+    }
+
+    .mobile-menu-panel .menu-section {
+        margin-top: 1.25rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--hairline);
+        transition: border-color .25s ease;
+    }
+    .mobile-menu-panel .menu-section:first-of-type {
+        margin-top: .75rem;
+        padding-top: 0;
+        border-top: none;
+    }
+    .mobile-menu-panel .menu-section-title {
+        font-family: var(--mono);
+        font-size: .7rem;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--ink-soft);
+        margin: 0 0 .75rem;
+    }
+    .mobile-menu-panel a.menu-link {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        padding: .65rem .75rem;
+        text-decoration: none;
+        color: var(--ink);
+        border-radius: 8px;
+        font-size: .95rem;
+        font-weight: 500;
+        transition: background-color .15s ease;
+    }
+    .mobile-menu-panel a.menu-link:hover {
+        background: var(--hairline);
+    }
+    .mobile-menu-panel .menu-link-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        flex-shrink: 0;
+    }
+    .dot-interp {
+        background: var(--c-interp);
+    }
+    .dot-align {
+        background: var(--c-align);
+    }
+    .dot-robust {
+        background: var(--c-robust);
+    }
+    .dot-gov {
+        background: var(--c-gov);
+    }
+    .dot-found {
+        background: var(--c-found);
+    }
+    .dot-future {
+        background: var(--c-future);
+    }
+
+    .mobile-menu-panel .menu-theme-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .5rem .75rem;
+    }
+    .mobile-menu-panel .menu-theme-row span {
+        font-size: .9rem;
+        color: var(--ink);
+    }
+
+    /* ---------- Top nav (colorful category pills) ---------- */
+    .topnav-wrap {
+        border-bottom: 1px solid var(--hairline);
+        position: relative;
+        transition: border-color .25s ease;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .topnav-wrap::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+    .topnav {
+        display: flex;
+        gap: .6rem;
+        padding: .9rem 0;
+        white-space: nowrap;
+        font-family: var(--mono);
+        font-size: .76rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        user-select: none;
+    }
+    .topnav.dragging {
+        cursor: grabbing;
+    }
+    .topnav a {
+        text-decoration: none;
+        color: var(--accent);
+        background: var(--tint);
+        padding: .4rem 1rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        transition: border-color .15s ease, transform .15s ease;
+        flex-shrink: 0;
+    }
+    .topnav a:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+    }
+    .topnav a[href="#interpretability"] {
+        --accent: var(--c-interp);
+        --tint: var(--c-interp-tint);
+    }
+    .topnav a[href="#alignment"] {
+        --accent: var(--c-align);
+        --tint: var(--c-align-tint);
+    }
+    .topnav a[href="#robustness-security"] {
+        --accent: var(--c-robust);
+        --tint: var(--c-robust-tint);
+    }
+    .topnav a[href="#governance-policy"] {
+        --accent: var(--c-gov);
+        --tint: var(--c-gov-tint);
+    }
+    .topnav a[href="#foundations"] {
+        --accent: var(--c-found);
+        --tint: var(--c-found-tint);
+    }
+    .topnav a[href="#agentic-futures"] {
+        --accent: var(--c-future);
+        --tint: var(--c-future-tint);
+    }
+
+    /* ---------- Nav scroll arrows ---------- */
+    .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        border: 1px solid var(--hairline);
+        background: var(--paper-raised);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink);
+        z-index: 10;
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease, box-shadow .2s ease, background-color .25s ease, border-color .25s ease, color .25s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    }
+    .nav-arrow.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .nav-arrow:hover {
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .15);
+        color: var(--c-align);
+    }
+    .nav-arrow:active {
+        transform: translateY(-50%) scale(.93);
+    }
+    .nav-arrow-left {
+        left: 0;
+    }
+    .nav-arrow-right {
+        right: 0;
+    }
+    .nav-arrow svg {
+        width: 14px;
+        height: 14px;
+        display: block;
+        flex-shrink: 0;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+        background: var(--paper-raised);
+        border: 1px solid var(--hairline);
+        border-radius: 10px;
+        padding: 2.75rem;
+        margin: 2.5rem 0;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 2.5rem;
+        align-items: center;
+        transition: background-color .25s ease, border-color .25s ease;
+    }
+    .hero h1 {
+        font-size: 2.4rem;
+        line-height: 1.15;
+        margin: 0 0 1rem;
+    }
+    .hero p {
+        color: var(--ink-soft);
+        font-size: 1.05rem;
+    }
+    .hero img {
+        width: 100%;
+        border-radius: 8px;
+        display: block;
+    }
+    .hero .read-more {
+        font-family: var(--mono);
+        font-size: .85rem;
+        text-decoration: none;
+        border-bottom: 1px solid var(--ink);
+    }
+
+    /* ---------- Intro line above categories ---------- */
+    .intro-line {
+        margin: 3rem 0 0;
+        color: var(--ink-soft);
+        max-width: 64ch;
+    }
+    .intro-line .tag {
+        font-weight: 700;
+    }
+    .tag-interp {
+        color: var(--c-interp);
+    }
+    .tag-align {
+        color: var(--c-align);
+    }
+    .tag-robust {
+        color: var(--c-robust);
+    }
+    .tag-gov {
+        color: var(--c-gov);
+    }
+    .tag-found {
+        color: var(--c-found);
+    }
+    .tag-future {
+        color: var(--c-future);
+    }
+
+    /* ---------- Category sections ---------- */
+    .safety-section {
+        padding: 2.75rem 0;
+        border-top: 1px solid var(--hairline);
+        transition: border-color .25s ease;
+    }
+    .section-head {
+        display: flex;
+        gap: 1.25rem;
+        align-items: center;
+        margin-bottom: 1.75rem;
+    }
+    .section-code {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1;
+        color: var(--accent);
+        background: var(--tint);
+        padding: .5rem .75rem;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+    .section-eyebrow {
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        font-size: .75rem;
+        font-weight: 600;
+        color: var(--accent);
+        margin: 0 0 .3rem;
+    }
+    .section-head h2 {
+        font-size: 1.85rem;
+        margin: 0 0 .4rem;
+    }
+    .section-desc {
+        color: var(--ink-soft);
+        max-width: 58ch;
+        margin: 0;
+    }
+
+    .safety-section[data-cat="interpretability"] {
+        --accent: var(--c-interp);
+        --tint: var(--c-interp-tint);
+    }
+    .safety-section[data-cat="alignment"] {
+        --accent: var(--c-align);
+        --tint: var(--c-align-tint);
+    }
+    .safety-section[data-cat="robustness-security"] {
+        --accent: var(--c-robust);
+        --tint: var(--c-robust-tint);
+    }
+    .safety-section[data-cat="governance-policy"] {
+        --accent: var(--c-gov);
+        --tint: var(--c-gov-tint);
+    }
+    .safety-section[data-cat="foundations"] {
+        --accent: var(--c-found);
+        --tint: var(--c-found-tint);
+    }
+    .safety-section[data-cat="agentic-futures"] {
+        --accent: var(--c-future);
+        --tint: var(--c-future-tint);
+    }
+
+    /* ---------- Cards ---------- */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    .safety-card {
+        background: var(--tint);
+        border: 1px solid var(--hairline);
+        border-left: 4px solid var(--accent);
+        border-radius: 6px;
+        padding: 1.25rem 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        transition: transform .15s ease, box-shadow .15s ease, background-color .25s ease, border-color .25s ease;
+        text-decoration: none;
+    }
+    .safety-card:hover,
+    .safety-card:focus-within {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(20, 25, 30, .14);
+    }
+    .card-eyebrow {
+        font-family: var(--mono);
+        font-size: .66rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: var(--accent);
+        font-weight: 600;
+        background: var(--paper-raised);
+        padding: .2rem .55rem;
+        border-radius: 999px;
+        width: fit-content;
+    }
+    .safety-card h3 {
+        font-size: 1.1rem;
+        margin: 0;
+    }
+    .safety-card p {
+        color: var(--ink-soft);
+        font-size: .92rem;
+        margin: 0;
+        flex-grow: 1;
+    }
+    .card-link {
+        font-family: var(--mono);
+        font-size: .76rem;
+        text-decoration: none;
+        color: var(--ink);
+        border-bottom: 1px solid var(--accent);
+        align-self: flex-start;
+        padding-bottom: 1px;
+    }
+    .card-link:hover {
+        color: var(--accent);
+    }
+
+    /* ---------- Long-form article blocks ---------- */
+    .article-block {
+        background: var(--paper-raised);
+        border: 1px solid var(--hairline);
+        border-left: 4px solid var(--accent);
+        border-radius: 6px;
+        padding: 2rem 2.25rem;
+        margin-bottom: 1.5rem;
+        transition: background-color .25s ease, border-color .25s ease;
+    }
+    .article-block .article-eyebrow {
+        font-family: var(--mono);
+        font-size: .7rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: .5rem;
+        background: var(--tint);
+        padding: .2rem .6rem;
+        border-radius: 999px;
+        display: inline-block;
+    }
+    .article-block h3.title {
+        font-size: 1.65rem;
+        margin: .5rem 0 .35rem;
+    }
+    .article-meta {
+        color: var(--ink-soft);
+        font-size: .85rem;
+        margin-bottom: 1.25rem;
+    }
+    .article-block h4 {
+        font-size: 1.08rem;
+        margin: 1.5rem 0 .5rem;
+        color: var(--accent);
+    }
+    .article-block ul {
+        margin: .25rem 0 1rem 1.1rem;
+        padding: 0;
+        color: var(--ink-soft);
+    }
+    .article-block li {
+        margin-bottom: .35rem;
+    }
+    .article-block li strong {
+        color: var(--ink);
+    }
+    blockquote.pullquote {
+        border-left: 3px solid var(--accent);
+        margin: 1.5rem 0;
+        padding: .2rem 0 .2rem 1.25rem;
+        font-family: var(--serif);
+        font-style: italic;
+        font-size: 1.05rem;
+        color: var(--ink);
+        background: var(--tint);
+        border-radius: 0 6px 6px 0;
+    }
+    .article-block iframe {
+        width: 100%;
+        height: 480px;
+        border: 1px solid var(--hairline);
+        border-radius: 6px;
+        margin: 1rem 0 .85rem;
+        background: #fff;
+    }
+    .btn-tool {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: .8rem;
+        padding: .5rem 1.1rem;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        border-radius: 999px;
+        text-decoration: none;
+        background: var(--tint);
+    }
+    .btn-tool:hover {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    /* ---------- Layout: content + sidebar ---------- */
+    .layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 3rem;
+        margin-top: 1rem;
+    }
+    .side-card {
+        background: var(--paper-raised);
+        border: 1px solid var(--hairline);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.25rem;
+        transition: background-color .25s ease, border-color .25s ease;
+    }
+    .side-card h4 {
+        font-size: 1rem;
+        margin: 0 0 .75rem;
+    }
+    .side-card p {
+        color: var(--ink-soft);
+        font-size: .9rem;
+        margin: 0;
+    }
+    .recent-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .recent-list li+li {
+        border-top: 1px solid var(--hairline);
+    }
+    .recent-list a {
+        display: block;
+        padding: .75rem 0;
+        text-decoration: none;
+    }
+    .recent-list h6 {
+        margin: 0 0 .2rem;
+        font-size: .92rem;
+        font-weight: 600;
+    }
+    .recent-list small {
+        color: var(--ink-soft);
+        font-family: var(--mono);
+        font-size: .72rem;
+    }
+    .elsewhere-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: .9rem;
+    }
+    .elsewhere-list li+li {
+        margin-top: .5rem;
+    }
+    .elsewhere-list a {
+        text-decoration: none;
+        border-bottom: 1px solid var(--hairline);
+    }
+
+    .pagination-row {
+        display: flex;
+        gap: .75rem;
+        margin-top: 1rem;
+    }
+
+    footer {
+        text-align: center;
+        padding: 3rem 0;
+        color: var(--ink-soft);
+        border-top: 1px solid var(--hairline);
+        margin-top: 2rem;
+        font-size: .9rem;
+        transition: border-color .25s ease;
+    }
+    footer a {
+        text-decoration: none;
+        border-bottom: 1px solid var(--hairline);
+    }
+
+    /* ---------- Body scroll lock ---------- */
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:900px) {
+        .layout {
+            grid-template-columns: 1fr;
+        }
+        .hero {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (max-width:768px) {
+        .site-header .side.left-side .desktop-only {
+            display: none;
+        }
+        .hamburger {
+            display: flex;
+        }
+        .site-header .side.right {
+            display: none;
+        }
+        .site-header .side {
+            flex: 0;
+        }
+        .site-header .side.left-side {
+            flex: 0;
+        }
+        .site-header .logo {
+            flex: 1;
+            text-align: center;
+        }
+        .site-header {
+            padding: 1rem 0;
+        }
+        .logo {
+            font-size: 1.35rem;
+        }
+        .hero {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            gap: 1.25rem;
+        }
+        .hero h1 {
+            font-size: 1.6rem;
+        }
+        .hero p {
+            font-size: .9rem;
+        }
+        .article-block {
+            padding: 1.25rem 1.25rem;
+        }
+        .article-block h3.title {
+            font-size: 1.3rem;
+        }
+        .article-block iframe {
+            height: 320px;
+        }
+        .section-head h2 {
+            font-size: 1.4rem;
+        }
+        .nav-arrow {
+            width: 28px;
+            height: 28px;
+        }
+        .nav-arrow svg {
+            width: 12px;
+            height: 12px;
+        }
+    }
+    @media (max-width:560px) {
+        .section-head {
+            flex-wrap: wrap;
+        }
+        .mobile-menu-panel {
+            width: 100%;
+            max-width: 100vw;
+        }
+        .card-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (prefers-reduced-motion:reduce) {
+        .safety-card,
+        body,
+        .hero,
+        .article-block,
+        .side-card,
+        .mobile-menu-panel,
+        .mobile-menu-backdrop,
+        .hamburger span {
+            transition: none;
+        }
+    }
+</style>
 </head>
+<body>
 
-<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-  <symbol id="aperture" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/>
-  </symbol>
-  <symbol id="cart" viewBox="0 0 16 16">
-    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-  </symbol>
-  <symbol id="chevron-right" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-  </symbol>
-</svg>
+    <div class="spectrum-bar"></div>
 
-<div class="container">
-  <header class="border-bottom lh-1 py-3">
-    <div class="row flex-nowrap justify-content-between align-items-center">
-      <div class="col-4 pt-1">
-        <a class="link-secondary" href="#">Subscribe</a>
-      </div>
-      <div class="col-4 text-center">
-        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Factity</a>
-      </div>
-      <div class="col-4 d-flex justify-content-end align-items-center">
-        <a class="link-secondary" href="#" aria-label="Search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
-        </a>
-        <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
-      </div>
-    </div>
-  </header>
+    <div class="container">
+        <header class="site-header">
+            <div class="side left-side">
+                <a href="#" class="desktop-only">Subscribe</a>
+                <button class="hamburger" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <a class="logo" href="#">Factity</a>
+            <div class="side right">
+                <a href="#" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
+                </a>
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+                </button>
+                <a class="btn-outline" href="#">Sign up</a>
+            </div>
+        </header>
 
-  <div class="nav-scroller py-1 mb-3 border-bottom">
-    <nav class="nav nav-underline justify-content-between">
-      <a class="nav-item nav-link link-body-emphasis active" href="#">Post training</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Fine tuning</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Alignment</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Reasoning</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Efficiency</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Datasets</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Applications</a>
-    </nav>
-  </div>
-</div>
+        <!-- Mobile menu -->
+        <div class="mobile-menu-backdrop" id="mobile-backdrop"></div>
+        <div class="mobile-menu-panel" id="mobile-panel" role="dialog" aria-modal="true" aria-label="Navigation menu">
+            <button class="menu-close" id="menu-close" type="button" aria-label="Close menu">✕</button>
 
-<main class="container ">
-<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-  <div class="row g-0 align-items-center">
-    <div class=" col-lg-6 px-0">
-      <h1 class="display-4 fst-italic">Low Rank Adaptation of Language Models</h1>
-      <p class="lead my-3">Language models have a unique capability to adapt to domain-specific or task-specific data. However, the costs of full fine-tuning and deploying independent instances of these expensive models are infeasible. Hence, a unique form of adaptation using the injection of rank decomposition matrices is proposed.</p>
-      <p class="lead mb-0"><a href="#" class="text-body-emphasis fw-bold">Continue reading...</a></p>
-    </div>
-    <div class=" col-lg-6 px-0">
-      <img class="img-fluid rounded" src="static/images/lora.jpg" alt="Low Rank Adaptation Illustration" width="auto" height="300" style="padding-left: 2.5rem;">
-    </div>
-  </div>
-</div>
-
-<div class="row mb-2">
-  <div class="col-md-6">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-      <div class="col p-4 d-flex flex-column position-static">
-        <strong class="d-inline-block mb-2 text-success-emphasis">Fine Tuning</strong>
-        <h3 class="mb-0">Instruction Fine-Tuning</h3>
-        <div class="mb-1 text-body-secondary">Jul 19, 2025</div>
-        <p class="mb-auto">Instruction fine-tuning is a technique used to adapt a pre-trained model to a specific task or dataset by providing additional training on a smaller, task-specific dataset using instruction and output pairs. This helps models understand the nuances of the task better.</p>
-        <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
-          Continue reading
-        </a>
-      </div>
-      <div class="col-auto d-none d-lg-block"></div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-      <div class="col p-4 d-flex flex-column position-static">
-        <strong class="d-inline-block mb-2 text-success-emphasis">Prompting</strong>
-        <h3 class="mb-0">Chain-of-Thought Prompting</h3>
-        <div class="mb-1 text-body-secondary">Jul 19, 2025</div>
-        <p class="mb-auto">Chain-of-thought prompting is a technique used to improve the performance of language models by encouraging them to reason through a problem step-by-step before arriving at an answer, using chain-of-thought demonstrations. This allows the model to better understand the problem and generate more accurate responses.</p>
-        <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
-          Continue reading
-        </a>
-      </div>
-      <div class="col-auto d-none d-lg-block"></div>
-    </div>
-  </div>
-</div>
-
-<div class="row mb-2">
-  <div class="col-md-6">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-      <div class="col p-4 d-flex flex-column position-static">
-        <strong class="d-inline-block mb-2 text-success-emphasis">Multi-Agent Systems</strong>
-        <h3 class="mb-0">Age of agents</h3>
-        <div class="mb-1 text-body-secondary">Jul 19, 2025</div>
-        <p class="mb-auto">From personal introspection to artificial intelligence: How AI agents mirror human thoughtfulness by breaking down complex tasks into collaborative, reflective processes that could redefine our relationship with technology. Creating a swarm of independent thinkers working in unison to bring ideas to life.</p>
-        <a href="blog" class="icon-link gap-1 icon-link-hover stretched-link">
-          Continue reading
-        </a>
-      </div>
-      <div class="col-auto d-none d-lg-block"></div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-      <div class="col p-4 d-flex flex-column position-static">
-        <strong class="d-inline-block mb-2 text-success-emphasis">ai safety</strong>
-        <h3 class="mb-0">Open questions</h3>
-        <div class="mb-1 text-body-secondary">Jul 19, 2025</div>
-        <p class="mb-auto">Answer ends a conversation a question starts one. So what are the concrete open questions in AI safety inspired by the post <a href="https://alignment.anthropic.com/2025/recommended-directions/">recommended-directions</a>I tried to list out all the possible questions. I believe this will help people who are new to ai safety understand the landscape better and hopefully raise more questions than answers.</p>
-        <a href="https://mukullight.pythonanywhere.com/form" class="icon-link gap-1 icon-link-hover stretched-link">
-          Continue reading
-        </a>
-      </div>
-      <div class="col-auto d-none d-lg-block"></div>
-    </div>
-  </div>
-</div>
-
-  <div class="row g-5">
-    <div class="col-md-8">
-      <h3 class="pb-4 mb-4 fst-italic border-bottom">
-        AI safety techniques 
-      </h3>
-      <article class="blog-post">
-        <h2 class="display-5 link-body-emphasis mb-1">Alignment of language models</h2>
-        <p class="blog-post-meta">Jul 19 2025 by <a href="#">Mukul Namagiri</a></p>
-        <p>Alignment is the process of ensuring that models behaviour, outputs and responses are consistent with the human values and goals</p>
-        <hr>
-        <p>We check for the models alignment with human values through various techniques such as reinforcement learning from human feedback (RLHF), adversarial testing, and interpretability methods etc. We hold a strong belief that with current rate progress in the autonomous gaming capabilities of llms there is strong case for investing in more robust systems and having better tractable, interpretabilible networks </p>
-        <h2></h2>
-        <p></p>
-        <blockquote class="blockquote">
-          "In a sensibly organized society, if you improve productivity, there is room for everybody to benefit. The problem isn't the technology, but the way the benefits are shared out." - Geoffrey Hinton
-        </blockquote>
-        <p>Having universal standards on what is safe and what is acceptable standards can be a challenging in a dynamic field such as ai safety. Having standardized evaluation methods is absolutely essential to ensure the safety and reliability of AI systems.</p>
-        <h3>AI safety criteria</h3>
-        <ul>
-          <li>Threat evaluation capabilities</li>
-          <li>Interpretability</li>
-          <li>Robustness</li>
-          <li>Scalability</li>
-          <li>Deception</li>
-        </ul>
-<article>
-  <h2>Adversarial Robustness</h2>
-  
-  <p>Adversarial robustness refers to a model's ability to maintain performance when facing malicious inputs or attacks. Key considerations include:</p>
-  
-  <h3>Attack Vectors</h3>
-  <ul>
-    <li><strong>Direct model attacks</strong>: Manipulation through adversarial prompts or inputs</li>
-    <li><strong>Indirect attacks</strong>: Exploiting system vulnerabilities or naive users</li>
-  </ul>
-
-  <h3>Defensive Measures</h3>
-  <ul>
-    <li>Input sanitization and validation</li>
-    <li>Adversarial training techniques</li>
-    <li>Model monitoring and anomaly detection</li>
-  </ul>
-
-  <h3>Evaluation Metrics</h3>
-  <p>Common assessment approaches include:</p>
-  <pre><code style="color: bisque; background: #a35757;"># Example evaluation pseudocode
-  def test_robustness(model, adversarial_examples):
-      success_rate = model.evaluate(adversarial_examples)
-      return 1 - success_rate</code></pre>
-
-  <p>Robust models should maintain performance even when facing carefully crafted adversarial inputs designed to exploit weaknesses.</p>
-</article>
-
-      <article class="blog-post">
-        <h2 class="display-5 link-body-emphasis mb-1">Adversarial alignment</h2>
-        <p class="blog-post-meta">December 23, 2020 by <a href="#">Mukul Namagiri</a></p>
-
-        <p>In adversarial alignment we test the model's ability to defend itself against toxicity, hate speech, profanity etc. even if a malicious user tries to trick the system. Since large parts of the pre-training data has biased and human generated data extracted from different forms of text platforms from the internet it is safe to assume that there is a high likelihood of having harmful tokens in the responses of the language model. Aligned models are general purpose models 
-
-We usually look for how robust the model is to attacks and if the target model is breached then how bad the consequences are for the attack. These breaches can be of the type first person where the attacker gets hands on access and perpetrates an direct attack on the model via prompting etc and on the other hand the attacker games naive users by inserting harmful code into the system in an embedded format where the harmful prompt is hidden in plain text which is used by the naive user there by attacking the system. 
-</p>
-        <p>
-Improving model performance requires thorough monitoring and modification standards to understand and adjust the internal workings of neural networks. By analyzing model weights, we can detect deceptive or sycophantic behavior. Additionally, preparing models for unexpected distributional shifts and ensuring adversarial alignment enhances their robustness and reliability.</p>
-        
-<article>
-  <h2>AI Model Evaluation Metrics</h2>
-  
-<h3>Example table</h3>
-
-
-        <p>Model metrics</p>
-        <table class="table">
-          <thead>
-            <tr>
-        <th>Model</th>
-        <th>Accuracy</th>
-        <th>Precision</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-                      <td>BERT-base</td>
-        <td>0.92</td>
-        <td>0.89</td>
-        <td>0.91</td>
-
-            </tr>
-            <tr>
-                      <td>GPT-3.5</td>
-        <td>0.88</td>
-        <td>0.91</td>
-        <td>0.86</td>
-
-            </tr>
-            <tr>
-                      <td>Llama 2</td>
-        <td>0.90</td>
-        <td>0.88</td>
-        <td>0.93</td>
-
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-        <td>Average</td>
-        <td>0.90</td>
-        <td>0.89</td>
-        <td>0.90</td>
-
-            </tr>
-          </tfoot>
-        </table>
-
-        <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other highly repetitive body text used throughout.</p>
-      </article>
-<article class="blog-post">
-  <h2 class="display-5 link-body-emphasis mb-1">Prompt tuning using propagation</h2>
-  <p class="blog-post-meta">June, 2025 by <a href="ptune">Factity AI</a></p>
-
-  <p>In this work, we explore "prompt tuning," an innovative approach for adapting frozen language models to specific tasks without modifying their core parameters. Unlike traditional methods, this technique offers remarkable efficiency while maintaining strong performance.</p>
-  
-  <h3>Key Advantages of Prompt Tuning</h3>
-  <ul>
-    <li><strong>Soft Prompts:</strong> Unlike GPT-3's discrete text prompts, we learn continuous "soft prompts" through backpropagation that can incorporate signals from labeled examples</li>
-    <li><strong>Scalability:</strong> Our method becomes increasingly competitive with model tuning as models grow beyond billions of parameters, eventually matching its performance</li>
-    <li><strong>Efficiency:</strong> Enables reuse of a single frozen model for multiple downstream tasks, reducing the computational burden of large models</li>
-  </ul>
-
-  <h3>Notable Findings</h3>
-  <p>Our research reveals several important insights:</p>
-  <ul>
-    <li>Prompt tuning significantly outperforms GPT-3's few-shot learning approach</li>
-    <li>The method simplifies earlier "prefix tuning" approaches while maintaining effectiveness</li>
-    <li>Soft prompts demonstrate improved robustness in domain transfer scenarios</li>
-    <li>Enables efficient "prompt ensembling" for enhanced performance</li>
-  </ul>
-
-  <p>This approach represents a significant step forward in making large language models more practical and accessible, as it dramatically reduces the resources needed to adapt them to specific tasks while maintaining their powerful capabilities.</p>
-</article>
-
-      <nav class="blog-pagination" aria-label="Pagination">
-        <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-        <a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
-      </nav>
-
-    </div>
-
-    <div class="col-md-4">
-      <div class="position-sticky" style="top: 2rem;">
-        <div class="p-4 mb-3 bg-body-tertiary rounded">
-          <h4 class="fst-italic">About</h4>
-          <p class="mb-0">Our mission is to make AI systems more Helpful, harmless and Humane. We help policy makers understand and navigate the complexities of AI technologies and evangelize about the importance of AI safety</p>
-        </div>
-
-        <div>
-          <h4 class="fst-italic">Recent posts</h4>
-          <ul class="list-unstyled">
-            <li>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
-                
-                <div class="col-lg-8">
-                  <h6 class="mb-0">importance of ai interpretability</h6>
-                  <small class="text-body-secondary">June, 2025</small>
+            <div class="menu-section">
+                <a class="menu-link" href="#">Subscribe</a>
+                <a class="menu-link" href="#">Search</a>
+                <a class="menu-link" href="#">Sign up</a>
+                <div class="menu-theme-row">
+                    <span>Theme</span>
+                    <button class="theme-toggle mobile-theme-toggle" id="theme-toggle-mobile" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+                        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+                    </button>
                 </div>
-              </a>
-            </li>
-            <li>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
-                            <div class="col-lg-8">
-                  <h6 class="mb-0">Effects of Fine Tuning using prompts</h6>
-                  <small class="text-body-secondary">June, 2025</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
-            
-                <div class="col-lg-8">
-                  <h6 class="mb-0">Effects of training deep neural nets with sub linear memory costs</h6>
-                  <small class="text-body-secondary">June, 2025</small>
-                </div>
-              </a>
-            </li>
-          </ul>
+            </div>
+
+            <div class="menu-section">
+                <p class="menu-section-title">AI Safety Categories</p>
+                <a class="menu-link" href="#interpretability"><span class="menu-link-dot dot-interp"></span> Interpretability</a>
+                <a class="menu-link" href="#alignment"><span class="menu-link-dot dot-align"></span> Alignment &amp; Deception</a>
+                <a class="menu-link" href="#robustness-security"><span class="menu-link-dot dot-robust"></span> Robustness &amp; Security</a>
+                <a class="menu-link" href="#governance-policy"><span class="menu-link-dot dot-gov"></span> Governance &amp; Policy</a>
+                <a class="menu-link" href="#foundations"><span class="menu-link-dot dot-found"></span> Foundations</a>
+                <a class="menu-link" href="#agentic-futures"><span class="menu-link-dot dot-future"></span> Agentic Systems &amp; Futures</a>
+            </div>
         </div>
 
-        <div class="p-4">
-          <h4 class="fst-italic">Sections</h4>
-          <ol class="list-unstyled mb-0">
-            <li><a href="#">Interpretability</a></li>
-            <li><a href="#">Scalable sight</a></li>
-            <li><a href="#">Deception by language models</a></li>
-            <li><a href="#">Robustness</a></li>
-            <li><a href="#">Better interpretability</a></li>
-            <li><a href="#">Concentration of power</a></li>
-            <li><a href="#">AI race</a></li>
-            <li><a href="#">AI cyber warefare</a></li>
-            <li><a href="#">persuasive ai</a></li>
-            <li><a href="#">Agentic systems</a></li>
-          </ol>
+        <div class="topnav-wrap" id="topnav-wrap">
+            <button class="nav-arrow nav-arrow-left" id="nav-arrow-left" aria-label="Scroll left" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <nav class="topnav" id="topnav" aria-label="AI safety categories">
+                <a href="#interpretability">Interpretability</a>
+                <a href="#alignment">Alignment &amp; Deception</a>
+                <a href="#robustness-security">Robustness &amp; Security</a>
+                <a href="#governance-policy">Governance &amp; Policy</a>
+                <a href="#foundations">Foundations</a>
+                <a href="#agentic-futures">Agentic Systems &amp; Futures</a>
+            </nav>
+            <button class="nav-arrow nav-arrow-right" id="nav-arrow-right" aria-label="Scroll right" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
         </div>
 
-        <div class="p-4">
-          <h4 class="fst-italic">Elsewhere</h4>
-          <ol class="list-unstyled">
-            <li><a href="https://github.com/Factity">GitHub</a></li>
-            <li><a href="https://x.com/MukulNamagiri">X</a></li>
-            <li><a href="https://www.instagram.com/fact.ity/">Facebook</a></li>
-            <li><a href="https://discord.gg/Aef5Xtynbr">Discord</a></li>
-          </ol>
+        <section class="hero">
+            <div>
+                <h1>Low Rank Adaptation of Language Models</h1>
+                <p>Language models have a unique capability to adapt to domain-specific or task-specific data. But the cost of fully fine-tuning and deploying an independent copy of a large model for every task is rarely worth it. LoRA instead injects small, trainable rank-decomposition matrices into an otherwise frozen model, adapting behaviour without touching the original weights. These forms of methods can have tremendous safety implications</p>
+
+            </div>
+            <img src="static/images/lora.jpg" alt="Low Rank Adaptation Illustration">
+        </section>
+
+        <p class="intro-line">Everything on this blog falls into one of six lenses we use to think about AI safety: <span class="tag tag-interp">Interpretability</span>, <span class="tag tag-align">Alignment &amp; Deception</span>, <span class="tag tag-robust">Robustness &amp; Security</span>, <span class="tag tag-gov">Governance &amp; Policy</span>, <span class="tag tag-found">Foundations</span>, and <span class="tag tag-future">Agentic Systems &amp; Futures</span>. Jump to any of them above, or scroll through in order below.</p>
+
+        <div class="layout">
+            <main>
+
+                <!-- ================= INTERPRETABILITY ================= -->
+                <section id="interpretability" class="safety-section" data-cat="interpretability">
+                    <div class="section-head">
+                        <span class="section-code">IN</span>
+                        <div>
+                            <p class="section-eyebrow">Category · 01</p>
+                            <h2>Interpretability</h2>
+                            <p class="section-desc">Opening up the black box: tracing which internal computations produced a given output, rather than just judging the output itself.</p>
+                        </div>
+                    </div>
+                    <div class="card-grid">
+                        <a class="safety-card" href="https://factity.github.io/safe-ai/interp_test">
+                            <span class="card-eyebrow">Interactive tool</span>
+                            <h3>Transformer Model Internals</h3>
+                            <p>An interactive walkthrough of what's actually happening inside a transformer, layer by layer.</p>
+                            <span class="card-link">Open the tool →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/fairness/bloxt">
+                            <span class="card-eyebrow">Reasoning traces</span>
+                            <h3>Chain-of-Thought &amp; Model Internals</h3>
+                            <p>Why reading a model's intermediate reasoning steps, not just its final answer, matters for catching problems early.</p>
+                            <span class="card-link">Read the piece →</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- ================= ALIGNMENT & DECEPTION ================= -->
+                <section id="alignment" class="safety-section" data-cat="alignment">
+                    <div class="section-head">
+                        <span class="section-code">AL</span>
+                        <div>
+                            <p class="section-eyebrow">Category · 02</p>
+                            <h2>Alignment &amp; Deception</h2>
+                            <p class="section-desc">Checking whether a model's stated values, hidden objectives, and observed behaviour all point the same direction — and catching it when they don't.</p>
+                        </div>
+                    </div>
+
+                    <article class="article-block">
+                        <p class="article-eyebrow">Essay</p>
+                        <h3 class="title">Alignment of Language Models</h3>
+                        <p class="article-meta">Jul 19, 2025 · Mukul Namagiri</p>
+                        <p>Alignment is the process of ensuring a model's behaviour, outputs, and responses stay consistent with human values and goals.</p>
+                        <p>We check a model's alignment through techniques like reinforcement learning from human feedback (RLHF), adversarial testing, and interpretability methods. Given the current pace of progress in autonomous LLM capabilities, there's a strong case for investing early in more robust, more tractable, more interpretable systems.</p>
+                        <blockquote class="pullquote">"In a sensibly organized society, if you improve productivity, there is room for everybody to benefit. The problem isn't the technology, but the way the benefits are shared out." — Geoffrey Hinton</blockquote>
+                        <p>Universal standards for what counts as "safe" are hard to pin down in a field moving this fast — which is exactly why standardized evaluation methods matter so much.</p>
+                        <h4>AI Safety Criteria</h4>
+                        <ul>
+                            <li><strong>Threat evaluation</strong> — can the model recognize when it's being misused?</li>
+                            <li><strong>Interpretability</strong> — can we trace why it did what it did?</li>
+                            <li><strong>Robustness</strong> — does it hold up under adversarial pressure?</li>
+                            <li><strong>Scalability</strong> — do the safeguards still work as capability grows?</li>
+                            <li><strong>Deception</strong> — is the model's behaviour honest about its own reasoning?</li>
+                        </ul>
+                    </article>
+
+                    <article class="article-block">
+                        <p class="article-eyebrow">Essay</p>
+                        <h3 class="title">Adversarial Alignment</h3>
+                        <p class="article-meta">Dec 23, 2020 · Mukul Namagiri</p>
+                        <p>Adversarial alignment tests whether a model can defend itself against toxicity, hate speech, and profanity, even when a user is actively trying to provoke it. Given how much pre-training data is scraped from unfiltered corners of the internet, some amount of harmful signal in a model's responses should be treated as the default risk, not the exception.</p>
+                        <p>Attacks generally fall into two shapes: <strong>first-person</strong> attacks, where someone has direct, hands-on access and attacks the model through prompting, and <strong>embedded</strong> attacks, where a harmful instruction is hidden inside otherwise ordinary content that an unsuspecting user then feeds into the system.</p>
+                        <p>Catching either kind requires monitoring beyond the model's outputs. Looking directly at model weights can surface deceptive or sycophantic behaviour before it ever shows up in a response, and it's a big part of preparing a model for the distribution shifts it will eventually meet in the wild.</p>
+                        <h4>AI Model Evaluation Metrics</h4>
+                        <iframe src="https://done-djbg.onrender.com/aider_polyglot_dashboard" title="AI model evaluation dashboard" loading="lazy">Your browser does not support iframes.</iframe>
+                        <a class="btn-tool" href="https://done-djbg.onrender.com/aider_polyglot_dashboard">View the evaluation dashboard</a>
+                    </article>
+                </section>
+
+                <!-- ================= ROBUSTNESS & SECURITY ================= -->
+                <section id="robustness-security" class="safety-section" data-cat="robustness-security">
+                    <div class="section-head">
+                        <span class="section-code">RB</span>
+                        <div>
+                            <p class="section-eyebrow">Category · 03</p>
+                            <h2>Robustness &amp; Security</h2>
+                            <p class="section-desc">Stress-testing models against adversarial inputs, prompt injection, and other deliberate attempts to break or misuse them.</p>
+                        </div>
+                    </div>
+
+                    <article class="article-block">
+                        <p class="article-eyebrow">Essay</p>
+                        <h3 class="title">Adversarial Robustness</h3>
+                        <p>Adversarial robustness is a model's ability to keep performing well when it's facing malicious or carefully crafted inputs, rather than the clean data it was mostly trained and tested on.</p>
+                        <h4>Attack Vectors</h4>
+                        <ul>
+                            <li><strong>Direct model attacks:</strong> manipulation through adversarial prompts or inputs</li>
+                            <li><strong>Indirect attacks:</strong> exploiting system-level vulnerabilities or naive users</li>
+                        </ul>
+                        <h4>Defensive Measures</h4>
+                        <ul>
+                            <li>Input sanitization and validation</li>
+                            <li>Adversarial training techniques</li>
+                            <li>Model monitoring and anomaly detection</li>
+                        </ul>
+                        <h4>Unified Effort to Bring Together AI Safety Literature</h4>
+                        <iframe src="https://factity.github.io/safe-ai/" title="Safe AI literature library" loading="lazy">Your browser does not support iframes.</iframe>
+                        <a class="btn-tool" href="https://factity.github.io/safe-ai/">Browse the safe-ai library</a>
+                    </article>
+
+                    <div class="card-grid">
+                        <a class="safety-card" href="https://factity.github.io/fairness/draftnormal">
+                            <span class="card-eyebrow">Weight constraints</span>
+                            <h3>Gradient Constraint Techniques</h3>
+                            <p>Constraining weight vectors to keep training stable when gradients threaten to vanish or explode.</p>
+                            <span class="card-link">Read the writeup →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/fairness/fallout">
+                            <span class="card-eyebrow">Historical case studies</span>
+                            <h3>AI Cyber Warfare — Learning from Past Mishaps</h3>
+                            <p>What nuclear, biological, and cyber incidents from the pre-AI era can teach us about planning for AI incidents.</p>
+                            <span class="card-link">Read the writeup →</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- ================= GOVERNANCE & POLICY ================= -->
+                <section id="governance-policy" class="safety-section" data-cat="governance-policy">
+                    <div class="section-head">
+                        <span class="section-code">GV</span>
+                        <div>
+                            <p class="section-eyebrow">Category · 04</p>
+                            <h2>Governance &amp; Policy</h2>
+                            <p class="section-desc">The rules, incentives, and power structures that decide who builds AI, how fast, and who ends up benefiting.</p>
+                        </div>
+                    </div>
+                    <div class="card-grid">
+                        <a class="safety-card" href="https://factity.github.io/fairness/blogdragon">
+                            <span class="card-eyebrow">Policy essay</span>
+                            <h3>Scaling Policies &amp; Human Progress</h3>
+                            <p>How the benefits of more capable AI get distributed is a policy choice, not an inevitability.</p>
+                            <span class="card-link">Read the essay →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/fairness/diplomacy">
+                            <span class="card-eyebrow">Futures &amp; economics</span>
+                            <h3>AI Diplomacy — Weights as Currency</h3>
+                            <p>A speculative look at international relations if model weights became a tradeable strategic asset.</p>
+                            <span class="card-link">Read the piece →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/fairness/questions">
+                            <span class="card-eyebrow">Open questions</span>
+                            <h3>Key Questions in AI Safety &amp; Governance</h3>
+                            <p>A running catalog of unresolved questions, meant to raise more questions than it answers.</p>
+                            <span class="card-link">Browse the questions →</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- ================= FOUNDATIONS ================= -->
+                <section id="foundations" class="safety-section" data-cat="foundations">
+                    <div class="section-head">
+                        <span class="section-code">FD</span>
+                        <div>
+                            <p class="section-eyebrow">Category · 05</p>
+                            <h2>Foundations</h2>
+                            <p class="section-desc">The math and training techniques that everything else on this page quietly depends on.</p>
+                        </div>
+                    </div>
+                    <div class="card-grid">
+                        <a class="safety-card" href="https://factity.github.io/safe-ai/APPEN/ml.html">
+                            <span class="card-eyebrow">Theory</span>
+                            <h3>Statistical Learning Theory</h3>
+                            <p>Machine learning re-derived from a statistical learning theory perspective, proofs and definitions included.</p>
+                            <span class="card-link">Explore project →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/safe-ai/APPEN/Linearalgebra.html">
+                            <span class="card-eyebrow">Mathematics</span>
+                            <h3>Linear Algebra Foundations</h3>
+                            <p>The linear algebra that shows up constantly once you start reading ML papers.</p>
+                            <span class="card-link">Explore project →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/safe-ai/APPEN/%20Calculus.html">
+                            <span class="card-eyebrow">Mathematics</span>
+                            <h3>Calculus</h3>
+                            <p>The calculus behind optimization and backpropagation, covered from first principles.</p>
+                            <span class="card-link">Explore project →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/safe-ai/APPEN/stats.html">
+                            <span class="card-eyebrow">Mathematics</span>
+                            <h3>Probability &amp; Statistics</h3>
+                            <p>Probability and statistics theory, framed around how it actually gets used in ML.</p>
+                            <span class="card-link">Explore project →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/safe-ai/APPEN/REINFORCMENT.html">
+                            <span class="card-eyebrow">Reinforcement learning</span>
+                            <h3>Reinforcement Learning Adaptation</h3>
+                            <p>A reinforcement learning implementation ported and reformatted from another codebase.</p>
+                            <span class="card-link">Explore project →</span>
+                        </a>
+                        <div class="safety-card">
+                            <span class="card-eyebrow">Fine-tuning</span>
+                            <h3>Instruction Fine-Tuning</h3>
+                            <p>How instruction/output pairs adapt a pretrained model to a specific task without retraining it from scratch.</p>
+                            <a class="card-link" href="#">Continue reading →</a>
+                        </div>
+                        <div class="safety-card">
+                            <span class="card-eyebrow">Prompting</span>
+                            <h3>Chain-of-Thought Prompting</h3>
+                            <p>Encouraging a model to reason step-by-step before answering, and why that improves accuracy.</p>
+                            <a class="card-link" href="#">Continue reading →</a>
+                        </div>
+                    </div>
+
+                    <article class="article-block">
+                        <p class="article-eyebrow">Technique</p>
+                        <h3 class="title">Prompt Tuning Using Propagation</h3>
+                        <p class="article-meta">Jun 2025 · Factity AI</p>
+                        <p>"Prompt tuning" adapts a frozen language model to a specific task without touching its core parameters — a lighter-weight cousin of the fine-tuning approaches above.</p>
+                        <h4>Key Advantages</h4>
+                        <ul>
+                            <li><strong>Soft prompts:</strong> unlike discrete text prompts, continuous "soft prompts" are learned through backpropagation and can absorb signal from labeled examples</li>
+                            <li><strong>Scalability:</strong> the approach becomes increasingly competitive with full model tuning as models grow past billions of parameters</li>
+                            <li><strong>Efficiency:</strong> one frozen model can be reused across many downstream tasks, cutting the compute cost of adaptation</li>
+                        </ul>
+                        <h4>Notable Findings</h4>
+                        <ul>
+                            <li>Outperforms few-shot prompting on the same base model</li>
+                            <li>Simplifies earlier "prefix tuning" approaches while keeping their effectiveness</li>
+                            <li>Shows improved robustness when transferred across domains</li>
+                            <li>Supports efficient "prompt ensembling" for further gains</li>
+                        </ul>
+                        <p>The net effect: adapting a large model to a new task gets dramatically cheaper, without giving up much of its underlying capability.</p>
+                    </article>
+                </section>
+
+                <!-- ================= AGENTIC SYSTEMS & FUTURES ================= -->
+                <section id="agentic-futures" class="safety-section" data-cat="agentic-futures">
+                    <div class="section-head">
+                        <span class="section-code">AF</span>
+                        <div>
+                            <p class="section-eyebrow">Category · 06</p>
+                            <h2>Agentic Systems &amp; Futures</h2>
+                            <p class="section-desc">Autonomous, multi-step AI systems, and the thought experiments about where they might eventually lead.</p>
+                        </div>
+                    </div>
+                    <div class="card-grid">
+                        <a class="safety-card" href="https://mukullight.github.io/factapp/build/blog.html">
+                            <span class="card-eyebrow">Agentic AI</span>
+                            <h3>Agentic AI Technology — My Perspective</h3>
+                            <p>A personal read on where agentic AI is headed, and what it changes once systems start acting on their own.</p>
+                            <span class="card-link">Read the piece →</span>
+                        </a>
+                        <div class="safety-card">
+                            <span class="card-eyebrow">Multi-agent systems</span>
+                            <h3>Age of Agents</h3>
+                            <p>How swarms of cooperating AI agents mirror the way people break down and delegate complex work.</p>
+                            <a class="card-link" href="blog">Continue reading →</a>
+                        </div>
+                        <a class="safety-card" href="https://factity.github.io/fairness/1984">
+                            <span class="card-eyebrow">Thought experiment</span>
+                            <h3>First Contact with AGI</h3>
+                            <p>A thought experiment on how humanity might actually react in the moment AGI arrives.</p>
+                            <span class="card-link">Read the piece →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/fairness/dys">
+                            <span class="card-eyebrow">Philosophy</span>
+                            <h3>Duality of Mind — Sinister vs Saint AI</h3>
+                            <p>Trying to reason through how a deliberately harmful AI and a deliberately benevolent one would approach the same problem.</p>
+                            <span class="card-link">Read the piece →</span>
+                        </a>
+                        <a class="safety-card" href="https://factity.github.io/fairness/">
+                            <span class="card-eyebrow">Satire</span>
+                            <h3>Unfairness in AI Training Data</h3>
+                            <p>A satirical look at the biases quietly baked into the data AI systems are trained on.</p>
+                            <span class="card-link">Read the piece →</span>
+                        </a>
+                        <div class="safety-card">
+                            <span class="card-eyebrow">AI safety</span>
+                            <h3>Open Questions</h3>
+                            <p>An answer ends a conversation; a question starts one. A list of concrete open questions in AI safety, inspired by Anthropic's <a href="https://alignment.anthropic.com/2025/recommended-directions/">recommended directions</a>.</p>
+                            <a class="card-link" href="https://mukullight.pythonanywhere.com/form">Continue reading →</a>
+                        </div>
+                    </div>
+
+                    <nav class="pagination-row" aria-label="Pagination">
+                        <a class="btn-tool" href="#">Page up</a>
+                    </nav>
+                </section>
+
+            </main>
+
+            <aside>
+                <div class="side-card">
+                    <h4>About</h4>
+                    <p>Our mission is to make AI systems more helpful, harmless, and humane. We help policy makers understand and navigate the complexities of AI technologies, and evangelize about the importance of AI safety.</p>
+                </div>
+
+                <div class="side-card">
+                    <h4>Recent Posts</h4>
+                    <ul class="recent-list">
+                        <li>
+                            <a href="https://share.jotbird.com/breezy-mighty-whiptail">
+                                <h6>Importance of AI Interpretability</h6>
+                                <small>JUN 2025</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://share.jotbird.com/curious-soaring-wren">
+                                <h6>Monosemanticity</h6>
+                                <small>JUN 2025</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://factity.github.io/fairness/humans">
+                                <h6>Only humans can do it </h6>
+                                <small>JUN 2025</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="side-card">
+                    <h4>Elsewhere</h4>
+                    <ul class="elsewhere-list">
+                        <li><a href="https://github.com/Factity">GitHub</a></li>
+                        <li><a href="https://discord.gg/Aef5Xtynbr">Discord</a></li>
+                    </ul>
+                </div>
+            </aside>
         </div>
-      </div>
+
+        <footer>
+            <p>Blog template built for Factity by Mukul Namagiri.</p>
+            <p><a href="#">Back to top</a></p>
+        </footer>
     </div>
-  </div>
 
-</main>
+    <script>
+        (function() {
+            var root = document.documentElement;
+            var themeToggles = document.querySelectorAll('.theme-toggle');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark ? 'dark' : 'light');
 
-<footer class="py-5 text-center text-body-secondary bg-body-tertiary">
-  <p>Blog template built for Factity by - Mukul Namagiri.</p>
-  <p class="mb-0">
-    <a href="#">Back to top</a>
-  </p>
-</footer>
+            themeToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function() {
+                    var current = root.getAttribute('data-theme');
+                    setTheme(current === 'dark' ? 'light' : 'dark');
+                });
+            });
 
-<script src="/static/js/bootstrap.bundle.min.js"></script>
-<script src="/static/js/blog.js"></script>
-<script src="/static/js/color-modes.js"></script>
-<script src="/static/js/placeholder.js"></script>
+            function setTheme(mode) {
+                root.setAttribute('data-theme', mode);
+                themeToggles.forEach(function(toggle) {
+                    toggle.setAttribute('aria-pressed', String(mode === 'dark'));
+                    toggle.setAttribute('aria-label', mode === 'dark' ? 'Switch to light mode' :
+                        'Switch to dark mode');
+                });
+            }
+
+            // ---------- Mobile menu ----------
+            var hamburger = document.getElementById('hamburger-btn');
+            var backdrop = document.getElementById('mobile-backdrop');
+            var panel = document.getElementById('mobile-panel');
+            var closeBtn = document.getElementById('menu-close');
+            var body = document.body;
+            var menuLinks = panel.querySelectorAll('a.menu-link');
+
+            function openMenu() {
+                hamburger.classList.add('active');
+                backdrop.classList.add('open');
+                panel.classList.add('open');
+                body.classList.add('menu-open');
+                hamburger.setAttribute('aria-expanded', 'true');
+                hamburger.setAttribute('aria-label', 'Close menu');
+                closeBtn.focus();
+                // Trap focus inside panel
+                panel.addEventListener('keydown', trapFocus);
+            }
+
+            function closeMenu() {
+                hamburger.classList.remove('active');
+                backdrop.classList.remove('open');
+                panel.classList.remove('open');
+                body.classList.remove('menu-open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                hamburger.setAttribute('aria-label', 'Open menu');
+                hamburger.focus();
+                panel.removeEventListener('keydown', trapFocus);
+            }
+
+            function trapFocus(e) {
+                if (e.key !== 'Tab') return;
+                var focusable = panel.querySelectorAll(
+                    'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                var first = focusable[0];
+                var last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+
+            hamburger.addEventListener('click', function() {
+                if (panel.classList.contains('open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            backdrop.addEventListener('click', closeMenu);
+            closeBtn.addEventListener('click', closeMenu);
+
+            // Close menu when a nav link is clicked
+            menuLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    closeMenu();
+                });
+            });
+
+            // Close on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && panel.classList.contains('open')) {
+                    closeMenu();
+                }
+            });
+
+            // ---------- Nav scroll arrows & drag-to-scroll ----------
+            var topnavWrap = document.getElementById('topnav-wrap');
+            var topnav = document.getElementById('topnav');
+            var arrowLeft = document.getElementById('nav-arrow-left');
+            var arrowRight = document.getElementById('nav-arrow-right');
+            var scrollAmount = 220;
+
+            function updateArrows() {
+                var overflow = topnav.scrollWidth > topnavWrap.clientWidth;
+                if (!overflow) {
+                    arrowLeft.classList.remove('visible');
+                    arrowRight.classList.remove('visible');
+                    return;
+                }
+                // Left arrow
+                if (topnav.scrollLeft <= 2) {
+                    arrowLeft.classList.remove('visible');
+                } else {
+                    arrowLeft.classList.add('visible');
+                }
+                // Right arrow
+                var maxScroll = topnav.scrollWidth - topnavWrap.clientWidth;
+                if (topnav.scrollLeft >= maxScroll - 2) {
+                    arrowRight.classList.remove('visible');
+                } else {
+                    arrowRight.classList.add('visible');
+                }
+            }
+
+            arrowLeft.addEventListener('click', function() {
+                topnav.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
+            arrowRight.addEventListener('click', function() {
+                topnav.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
+
+            topnav.addEventListener('scroll', updateArrows);
+            window.addEventListener('resize', updateArrows);
+
+            // Drag-to-scroll on the nav
+            var isDragging = false;
+            var startX, startScroll;
+            var dragThreshold = 5;
+            var hasMoved = false;
+
+            topnav.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                hasMoved = false;
+                startX = e.pageX;
+                startScroll = topnav.scrollLeft;
+                topnav.classList.add('dragging');
+                topnav.style.cursor = 'grabbing';
+            });
+
+            topnav.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                var dx = e.pageX - startX;
+                if (Math.abs(dx) > dragThreshold) {
+                    hasMoved = true;
+                }
+                topnav.scrollLeft = startScroll - dx;
+            });
+
+            topnav.addEventListener('mouseup', function() {
+                isDragging = false;
+                topnav.classList.remove('dragging');
+                topnav.style.cursor = '';
+            });
+
+            topnav.addEventListener('mouseleave', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    topnav.classList.remove('dragging');
+                    topnav.style.cursor = '';
+                }
+            });
+
+            // Prevent click on nav links after dragging
+            topnav.addEventListener('click', function(e) {
+                if (hasMoved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hasMoved = false;
+                }
+            }, true);
+
+            // Touch events for mobile drag
+            topnav.addEventListener('touchstart', function(e) {
+                isDragging = true;
+                hasMoved = false;
+                startX = e.touches[0].pageX;
+                startScroll = topnav.scrollLeft;
+                topnav.classList.add('dragging');
+            }, { passive: false });
+
+            topnav.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                var dx = e.touches[0].pageX - startX;
+                if (Math.abs(dx) > dragThreshold) {
+                    hasMoved = true;
+                }
+                topnav.scrollLeft = startScroll - dx;
+            }, { passive: false });
+
+            topnav.addEventListener('touchend', function() {
+                isDragging = false;
+                topnav.classList.remove('dragging');
+                // Prevent subsequent click on links after drag
+                if (hasMoved) {
+                    setTimeout(function() { hasMoved = false; }, 100);
+                }
+            });
+
+            // Initial arrow check
+            updateArrows();
+            // Re-check on load in case fonts haven't settled
+            window.addEventListener('load', updateArrows);
+        })();
+    </script>
+</body>
+</html>
